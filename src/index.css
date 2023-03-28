@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+body {
+  @apply text-slate-700;
+}
+
+h1 {
+  @apply text-3xl;
+}
+
+p {
+  @apply text-slate-700;
+}
+
+select {
+  @apply block p-2 w-full;
+}

@@ -4,57 +4,49 @@ import { toast } from "react-toastify";
 import AddBudgetForm from "../components/AddBudgetForm";
 import AddExpenseForm from "../components/AddExpenseForm";
 import Intro from "../components/Intro";
-import { Highlighted } from "../components/Typography";
-import { createBudget, fetchData } from "../utils/helpers";
+// import { Highlighted } from "../components/Typography";
+import { createBudget, createNewExpense, fetchData } from "../utils/helpers";
+import Budgets from "../components/Budgets.jsx";
+import { handleFormSubmit } from "../utils/handleFormSubmit";
 
 // =============================================================
 // component
 
 const Dashboard = () => {
-  const { userName, budgets } = useLoaderData();
+  const { userName, budgets, expenses } = useLoaderData();
   // console.log("dash", userName);
 
   const Welcome = () => (
     <>
-      <h1 className="font-semibold">
-        Welcome back <Highlighted>{userName}</Highlighted>
+      <h1 className="font-semibold mb-8 capitalize">
+        Welcome back{" "}
+        <span className="underline decoration-indigo-200 hover:decoration-2 hover:decoration-indigo-400 transition-all">
+          {userName}
+        </span>
       </h1>
       <AddBudgetForm />
       {budgets && <AddExpenseForm budgets={budgets} />}
+      <Budgets budgets={budgets} />
     </>
   );
+  // return <Welcome/>;
   return <section>{userName ? <Welcome /> : <Intro />}</section>;
 };
 
 // =============================================================
 // loader
+
 export const dashboardLoader = () => {
   const userName = fetchData("userName");
   const budgets = fetchData("budgets");
-  return { userName, budgets };
+  const expenses = fetchData("expenses");
+  return { userName, budgets, expenses };
 };
 
 // =============================================================
 // action
 export const dashboardAction = async ({ request }) => {
-  const data = await request.formData();
-  const { _action, ...formValues } = Object.fromEntries(data);
-
-  console.log("_action ", _action);
-  console.log("formvalues", formValues);
-
-  if (_action === "addNewUser") {
-    localStorage.setItem("userName", JSON.stringify(formValues.userName));
-    toast.success("Welcome Back " + formValues.userName);
-  }
-
-  if (_action === "addNewBudget") {
-    createBudget(formValues.budgetName, formValues.budgetAmount);
-    return toast.success(
-      `added new ${formValues.budgetName} budget, ${formValues.budgetAmount}$`
-    );
-  }
-  return null;
+  return handleFormSubmit(request);
 };
 
 export default Dashboard;

@@ -1,14 +1,14 @@
 import React from "react";
-import {Outlet, useLoaderData} from "react-router-dom";
+import { Outlet, useLoaderData } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import {fetchData} from "../utils/helpers.js";
+import { fetchData } from "../utils/helpers.js";
 
 const MainLayout = () => {
-    const {userName} = useLoaderData();
+  const { userName } = useLoaderData();
   return (
     <>
-      <Header userName={userName}/>
+      <Header userName={userName} />
       <main className="p-2">
         <Outlet />
       </main>
@@ -19,10 +19,9 @@ const MainLayout = () => {
 
 export default MainLayout;
 
-
 // loader
 
-export function mainLoader()  {
-    const userName = fetchData("userName");
-    return {userName}
+export function mainLoader() {
+  const userName = fetchData("userName");
+  return { userName };
 }
